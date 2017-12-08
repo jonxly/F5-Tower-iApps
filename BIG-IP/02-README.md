@@ -1,5 +1,5 @@
 #Exercise 2 - Part 1 - Request an auth token
-Maybe you want to use auth tokens, maybe you don't. Either way we're going to use the Auth Token to demonstrate a simple REST API POST. Take a look at 'BIG-IP/02-bigip-get_auth_token.yml': https://github.com/npearce/F5-iApps_and_Ansible-playbooks/blob/master/BIG-IP/02-bigip-get_auth_token.yml
+Maybe you want to use auth tokens, maybe you don't. Either way we're going to use the Auth Token to demonstrate a simple REST API POST. Take a look at 'BIG-IP/02-bigip-get_auth_token-part1.yml': https://github.com/jonxly/F5-iApps_and_Ansible-playbooks/blob/master/BIG-IP/02-bigip-get_auth_token-part1.yml
 
 You will notice a few new options:
 
