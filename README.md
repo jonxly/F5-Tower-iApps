@@ -18,27 +18,26 @@ https://redtalks.live/2016/11/10/redtalks-08-hitesh-on-imperative-vs-declarative
 #Environment
 The Ansible playbooks in this repository were developed using the following environment:
 
-* Ansible Tower 3.0.3 (running on CentOS 7)
+* Ansible Tower 3.2.1 (running on CentOS 7)
 * iWorkflow v2.1 (to be released Feb 2017 - playbooks will be made available then)
 * BIG-IP 12.1.0
 
-NOTE: Default install of CentOS 7 (w/ 4GB RAM) using the CentOS 7 DVD ISO.
+NOTE: Default install of CentOS 7 (w/ 2GB RAM) using the CentOS 7 DVD ISO.
 
-For install instructions refer to the 'Ansible Tower Quick Installation Guide v3.0.3':
+For install instructions refer to the 'Ansible Tower Quick Installation Guide v3.2.1':
 
 http://docs.ansible.com/ansible-tower/latest/html/quickinstall/index.html
 
 #Getting started
-**IMPORTANT** install the 'Ansible Bundle'. When I registered for a trail license, I was sent a link to the Ansible Tower download. This assumes you know Ansible well enough to get it working with a pre-installed Ansible environment. Its not straight forward if you are new to Ansible. However, if you install the Ansible *Bundle* it will install both Ansible and Ansible Tower together and they will work immediately.
 
 This is the Bundle that works straight away:
 
 https://releases.ansible.com/awx/setup-bundle/ansible-tower-setup-bundle-latest.el7.tar.gz
 
 ##Ansible Tower
-Once up and running, unless you're an Ansible Tower pro already, I *highly* recommend you go through the "Ansible Tower Quick Setup Guide v3.0.3" before attempting Exercise 1. This guide will walk you through all the parts of Ansible Tower:
+Once up and running, unless you're an Ansible Tower pro already, I *highly* recommend you go through the "Ansible Tower Quick Setup Guide v3.2.1" before attempting Exercise 1. This guide will walk you through all the parts of Ansible Tower:
 
-http://docs.ansible.com/ansible-tower/3.0.3/html/quickstart/index.html
+http://docs.ansible.com/ansible-tower/3.2.1/html/quickstart/index.html
 
 ##Where do things go?
 Ansible's getting started documentation is minimal (it assumes you already know their file/directory structure). For this exercise, everything of importance goes in:
