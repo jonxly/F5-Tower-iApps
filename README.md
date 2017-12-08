@@ -19,7 +19,6 @@ https://redtalks.live/2016/11/10/redtalks-08-hitesh-on-imperative-vs-declarative
 The Ansible playbooks in this repository were developed using the following environment:
 
 * Ansible Tower 3.2.1 (running on CentOS 7)
-* iWorkflow v2.1 (to be released Feb 2017 - playbooks will be made available then)
 * BIG-IP 12.1.0
 
 NOTE: Default install of CentOS 7 (w/ 2GB RAM) using the CentOS 7 DVD ISO.
@@ -53,9 +52,9 @@ Login to Ansible Tower using the credentials you provided during installation an
 4. In the new window that appears, click '+ADD GROUP'
 5. Name your group 'bigips' (this will be references by the playbooks), and select the source 'Manual'. Click 'Save'.
 6. On the left-hand side, click on the newly created 'bigips' group, then click the '+ADD HOST' button to the right.
-7. Enter the hostname (assuming your Ansible-Tower serup has DNS configured) or IP Address of the BIG-IP management interface. For bigip1.n8lab.local we are using its management IP Address: `10.128.1.128`.
+7. Enter the hostname (assuming your Ansible-Tower serup has DNS configured) or IP Address of the BIG-IP management interface. For bigip1.n8lab.local we are using its management IP Address: `10.128.1.247`.
 8. Click 'Save'
-9. At the top of the window you should now see the inventory hierarchy as: "INVENTORIES \ MYINVENTORY \ BIGIPS \ 10.128.1.128"
+9. At the top of the window you should now see the inventory hierarchy as: "INVENTORIES \ JINVENTORY \ BIGIPS \ 10.128.1.247"
 10. [optional] - you can add more BIG-IP hosts to the 'bigips' group.
 
 ##Step 2 - Add some credentials for accessing the BIG-IP
@@ -76,7 +75,7 @@ http://docs.ansible.com/ansible-tower/latest/html/userguide/credentials.html
 2. Click the green '+ADD' button.
 3. Enter the name 'myProject'.
 4. Select the SCM type 'Git'
-5. Enter the SCM URL `https://github.com/npearce/F5-iApps_and_Ansible-playbooks`. Leave the 'SCM update options' unchecked for now.
+5. Enter the SCM URL `https://github.com/jonxly/F5-iApps_and_Ansible-playbooks`. Leave the 'SCM update options' unchecked for now.
 6. Click 'Save'
 7. Scroll down to the 'Projects' pane at the bottom of the 'Projects' page.
 8. Next to 'myProject', click the download icon (cloud with a downward pointing arrow).
