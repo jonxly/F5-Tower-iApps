@@ -60,11 +60,12 @@
   hosts: bigips
   tasks:
     ## This is where we fetch the iApp from a HTTP link and push it to the BIG-IP
-    - name: Push iApp to BIG-IP
+    - name: download iApp
       get_url:
         validate_certs: no
         url: "{{appsvcs_source}}"
         dest: /var/tmp/
+      delegate_to: localhost        
     ## Execute the tmsh command to install the iApp from /var/tmp
     ## 2.4 allows u to upload iApp via REST
     - name: "Install iApp"
