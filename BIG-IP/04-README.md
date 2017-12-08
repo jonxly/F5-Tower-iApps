@@ -31,7 +31,7 @@ Why convert it to YAML? A couple of reasons:
 4. Leave the default job type as 'Run'.
 5. For 'Inventory', click the magnifying glass. From the window that appears, select 'myInventory' and click 'save'.
 6. For 'Project', click the magnifying glass and select 'myProject'.
-7. For 'Playbook', select 'BIG-IP/03-bigip-install_iapp.yml'
+7. For 'Playbook', select 'BIG-IP/04-bigip-deploy_L4-L7_service-part1.yml'
 8. For 'Machine Credential' click the magnifying glass and select 'bigips'.
 9. Leave verbosity set as '0 (Normal)'.
 10. Remember to add the required variables in again, referenced in the comments at the top of the playbook (for example):
@@ -39,8 +39,8 @@ Why convert it to YAML? A couple of reasons:
 ```
 username: admin
 password: admin
-service_name: myHTTP_Service_1
-virtual_ip_address: 10.128.10.21
+service_name: jHTTP_Service_1
+virtual_ip_address: 10.128.10.22
 pool_member_1: 10.128.20.1
 pool_member_2: 10.128.20.2
 ```
@@ -68,7 +68,7 @@ Enter, templates! Not to be confused with the Ansible Tower 'Job Templates', Ans
 {% endfor %}
 ```
 
-This is taking a look at the Ansible Tower 'Inventory', where I created an Invetory Group named 'Web_Servers' in which I entered the IP addresses of some web servers. The Jinja2 loop above will iterate through the list for each web server.
+This is taking a look at the Ansible Tower 'Inventory', where I created an Inventory Group named 'Web_Servers' in which I entered the IP addresses of some web servers. The Jinja2 loop above will iterate through the list for each web server.
 
 So, how to we execute this nifty template feature? There's a new command in 'BIG-IP/04-bigip-deploy_L4-L7_service-part2.yml' that we haven't used before:
 
@@ -77,7 +77,7 @@ So, how to we execute this nifty template feature? There's a new command in 'BIG
   template: src={{ playbook_dir }}/BIG-IP/template_deploy.j2 dest=/var/lib/awx/projects/_6__myproject/BIG-IP/deploy_payload.yml
 ```
 
-The template si executed which then creates the 'deploy_payload.yml' at the time the playbook is executed. Yay, dynamic JSON body creation!
+The template is executed which then creates the 'deploy_payload.yml' at the time the playbook is executed. Yay, dynamic JSON body creation!
 
 Now, take a look at 'body:' in 'BIG-IP/04-bigip-deploy_L4-L7_service-part2.yml'. We've replaced many lines of YAML with:
 
@@ -85,7 +85,7 @@ Now, take a look at 'body:' in 'BIG-IP/04-bigip-deploy_L4-L7_service-part2.yml'.
 body: "{{ (lookup('template','{{ playbook_dir }}/BIG-IP/deploy_payload.yml') | from_yaml) }}"
 ```
 
-The 'from_yaml' is just telling the playbook its YAML. Otherwise it just see a large string of nonesense. By telling Anislbe its YAML, then it knows it can convert it to JSON (because of 'body_format: json').
+The 'from_yaml' is just telling the playbook its YAML. Otherwise it just see a large string of nonesense. By telling Ansible its YAML, then it knows it can convert it to JSON (because of 'body_format: json').
 
 
 ##Create a new Job Template
@@ -97,13 +97,13 @@ The 'from_yaml' is just telling the playbook its YAML. Otherwise it just see a l
 ```
 username: admin
 password: admin
-service_name: myHTTP_Service_2
-virtual_ip_address: 10.128.10.22
+service_name: jHTTP_Service_2
+virtual_ip_address: 10.128.10.23
 ```
 
 5. Click 'Save'.
 6. *IMPORTANT* The pool members are now sourced via an Inventory Group. So, navigate to 'Inventories'
-7. Click 'myInventory'.
+7. Click 'jInventory'.
 8. Click the green 'Add Group' button.
 9. Enter 'Web_Servers' as the group name (this is used by the template).
 10. For 'source' select 'Manual'.
@@ -121,4 +121,4 @@ virtual_ip_address: 10.128.10.22
 #Exercise 5 - Start experimenting with templates
 We're done. Hopefully that's a good intro for you. Let me know if you want to understand more.
 
-I recommend you start experimenting with 'template_deploy.j2' - located here:  https://github.com/npearce/F5-iApps_and_Ansible-playbooks/blob/master/BIG-IP/template_deploy.j2 - if you want to start customizing more of the service templates options. As you can see, there are many more options to tweak!
+I recommend you start experimenting with 'template_deploy.j2' - located here:  https://github.com/jonxly/F5-iApps_and_Ansible-playbooks/blob/master/BIG-IP/template_deploy.j2 - if you want to start customizing more of the service templates options. As you can see, there are many more options to tweak!
