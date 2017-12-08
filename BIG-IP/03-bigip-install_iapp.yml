@@ -12,17 +12,17 @@
 #
 #
 #  Examples:
-#  username: admin
-#  password: admin
-#  appsvcs_major: "2.0"
-#  appsvcs_minor: "002"
-#  appsvcs_pres: "004"
-#  appsvcs_file: appsvcs_integration_v{{ appsvcs_major }}-{{ appsvcs_minor }}_{{ appsvcs_pres }}.tmpl
-#  appsvcs_source: https://github.com/F5Networks/f5-application-services-integration-iApp/releases/download/v2.0.004/appsvcs_integration_v2.0.004.tmpl
+# username: admin
+# password: admin
+# appsvcs_major: "2.0"
+# appsvcs_minor: "002"
+# appsvcs_pres: "004"
+# appsvcs_source: https://github.com/F5Networks/f5-application-services-integration-iApp/releases/download/v2.0.004/appsvcs_integration_v2.0.004.tmpl
+# appsvcs_ver: appsvcs_integration_v{{ appsvcs_major }}.{{ appsvcs_pres }}
+# appsvcs_file: appsvcs_integration_v{{ appsvcs_major }}.{{ appsvcs_pres }}.tmpl
+####
 #  old_appsvcs_source: http://appsvcs-integration-iapp.readthedocs.io/en/v2.0_001/_static/appsvcs_integration_v{{ appsvcs_major }}-{{ appsvcs_minor }}_{{ appsvcs_pres }}.tmpl
-#  appsvcs_ver: appsvcs_integration_v{{ appsvcs_major }}_{{ appsvcs_pres }}
-#
-#
+#  old_appsvcs_ver: appsvcs_integration_v{{ appsvcs_major }}_{{ appsvcs_pres }}
 #  In the above example, "appsvcs_integration_v{{ appsvcs_major }}-{{ appsvcs_minor }}_{{ appsvcs_pres }}.tmpl" returns,
 #  "appsvcs_integration_v2.0-002_001.tmpl"
 #
@@ -70,7 +70,7 @@
     ## 2.4 allows u to upload iApp via REST
     - name: "Install iApp"
       bigip_iapp_template:
-        server: "{{ ansible_hostname }}"
+        server: "{{ inventory_hostname }}"
         user: "{{ username }}"
         password: "{{ password }}"
         content: "{{ lookup('file', '/var/tmp/appsvcs_integration_v2.0.004.tmpl') }}" #Name of iApp
