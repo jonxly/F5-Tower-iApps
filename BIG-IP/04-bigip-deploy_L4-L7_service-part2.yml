@@ -11,7 +11,7 @@
 #  Examples:
 #  username: admin
 #  password: admin
-#  service_name: myHTTP_Service
+#  service_name: jHTTP_Service
 #  virtual_ip_address: 10.128.10.20
 #
 # Author: Nathan Pearce
