@@ -54,7 +54,7 @@
       password: "{{ password }}"
       body:
         name: "{{ service_name }}"
-        template: appsvcs_integration_v2.0_001
+        template: appsvcs_integration_v2.0.004
         vars:
           extensions__Field1: ''
           extensions__Field2: ''
@@ -192,7 +192,7 @@
               - '0'
               - enabled
               - ''
-## Need to make pool memebr count dynamic. Uncomment this to use 3 pool members.
+## Need to make pool member count dynamic. Uncomment this to use 3 pool members.
 #            - - '0'
 #              - '{{ pool_member_3 }}'
 #              - '80'
