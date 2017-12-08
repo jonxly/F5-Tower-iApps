@@ -16,9 +16,10 @@
 #  password: admin
 #  appsvcs_major: "2.0"
 #  appsvcs_minor: "002"
-#  appsvcs_pres: "001"
+#  appsvcs_pres: "004"
 #  appsvcs_file: appsvcs_integration_v{{ appsvcs_major }}-{{ appsvcs_minor }}_{{ appsvcs_pres }}.tmpl
-#  appsvcs_source: http://appsvcs-integration-iapp.readthedocs.io/en/v2.0_001/_static/appsvcs_integration_v{{ appsvcs_major }}-{{ appsvcs_minor }}_{{ appsvcs_pres }}.tmpl
+#  appsvcs_source: https://github.com/F5Networks/f5-application-services-integration-iApp/releases/download/v2.0.004/appsvcs_integration_v2.0.004.tmpl
+#  old_appsvcs_source: http://appsvcs-integration-iapp.readthedocs.io/en/v2.0_001/_static/appsvcs_integration_v{{ appsvcs_major }}-{{ appsvcs_minor }}_{{ appsvcs_pres }}.tmpl
 #  appsvcs_ver: appsvcs_integration_v{{ appsvcs_major }}_{{ appsvcs_pres }}
 #
 #
