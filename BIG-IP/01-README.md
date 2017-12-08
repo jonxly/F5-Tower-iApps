@@ -1,6 +1,6 @@
 Before attempting the BIG-IP Exercises below make sure your environment is up and running first as per the instructions in the Setup README.md:
 
-https://github.com/npearce/F5-iApps_and_Ansible-playbooks/blob/master/README.md
+https://github.com/jonxly/F5-iApps_and_Ansible-playbooks/blob/master/README.md
 
 #Exercise 1 - Part 1 - First contact
 For 'Exercise 1' we will create a basic Ansible Tower Job that will perform a simple REST 'GET'.
@@ -28,7 +28,7 @@ What happened? Failed, right? unless your BIG-IP had the password 'password', th
 ###Review the playbook
 First lets review the working parts of the playbook:
 
-https://github.com/npearce/F5-iApps_and_Ansible-playbooks/blob/master/BIG-IP/01-bigip-list_service_templates-part1.yml
+https://github.com/jonxly/F5-iApps_and_Ansible-playbooks/blob/master/BIG-IP/01-bigip-list_service_templates-part1.yml
 
 This part performs the request:
 ```
@@ -60,6 +60,7 @@ And this part tells Ansible its looking at JSON, and to print out the contents o
 `register` collects the response and stores it in `iapps_list`
 
 ###Fix the playbook
+#[dec17] update: modifying the playbook directly seems to throw an error, instead fork git repo, modify playbook and run update proj whenever changes need to be pushed to tower
 To fix the playbook you will need a console login to the Ansible Tower host.
 1. Navigate to '/var/lib/awx/projects/'
 2. Find your project (based on its directory name). Ansible will pre-pend a number to the project name. For example, `_22_myproject`. Note also that it is all lowercase.
@@ -76,7 +77,7 @@ In the Job Template, change the 'verbosity' level from "0 (normal)" to "3 (debug
 #Exercise 1 – Part 2 - Using variables to avoid playbook edits
 Part 2 performs the same action as Part1. However, it introduces some new themes.
 
-Take a look at 'BIG-IP/01-bigip-list_service_templates-part2.yml': https://github.com/npearce/F5-iApps_and_Ansible-playbooks/blob/master/BIG-IP/01-bigip-list_service_templates-part2.yml
+Take a look at 'BIG-IP/01-bigip-list_service_templates-part2.yml': https://github.com/jonxly/F5-iApps_and_Ansible-playbooks/blob/master/BIG-IP/01-bigip-list_service_templates-part2.yml
 
 NOTE: pay attention to the comments at the top of the playbook file. It says you need to use two variables in order to execute this playbook.
 
@@ -135,7 +136,7 @@ In "BIG-IP/01-bigip-list_service_templates-part3.yml" we're combining a variable
 ```
 
 You will note, once again, the comments at the top of this playbook informing you which variables are expected for execution:
-https://github.com/npearce/F5-iApps_and_Ansible-playbooks/blob/master/BIG-IP/01-bigip-list_service_templates-part3.yml
+https://github.com/jonxly/F5-iApps_and_Ansible-playbooks/blob/master/BIG-IP/01-bigip-list_service_templates-part3.yml
 
 We must now add the variable: 'appsvcs_ver'
 
@@ -149,7 +150,7 @@ We must now add the variable: 'appsvcs_ver'
 
 Note how 'Prompt on launch' enables the administrator to edit the variables just prior to execution.
 
-Unless you had already manually installed the 'appsvcs_integration_v2.0_001-001.tmpl' from GitHub, it will report 'Note found'. Installing this template is covered in "Exercise 3".
+Unless you had already manually installed the 'appsvcs_integration_v2.0.004.tmpl' from GitHub, it will report 'Note found'. Installing this template is covered in "Exercise 3".
 
 #Exercise 1 - Part 4 - Handling appsvcs_integration versions
 Thus far we have been specifying an exact iApp version, which is fine as a one-off but, now its time to handle versions better. Handling this now will make life easier later.
@@ -175,7 +176,7 @@ An iApp name contains version numbers for both the implementation layer (major a
 
 For more on appsvcs_integration versions please read: http://appsvcs-integration-iapp.readthedocs.io/en/latest/design.html#versioning
 
-Unless you had already installed the iApp manually, the playbook will come back `"msg": "'appsvcs_integration_v2.0_001' not found"` but note that it correctly assembled the version number variables to produce the correct name 'appsvcs_integration_v2.0_001'. We'll use this more later!
+Unless you had already installed the iApp manually, the playbook will come back `"msg": "'appsvcs_integration_v2.0.004' not found"` but note that it correctly assembled the version number variables to produce the correct name 'appsvcs_integration_v2.0.004'. We'll use this more later!
 
 *Optional exercise:*
 Run the same playbook again but providing an iApp we know exists. For example, "f5.http". This should will report 'f5.http found'. Note that we did no re-write any of the playbook to achieve this.
