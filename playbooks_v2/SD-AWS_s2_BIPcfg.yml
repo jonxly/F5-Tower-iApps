@@ -1,0 +1,89 @@
+---
+# [dec17] push config to BIGIP #s2
+# Notes:
+# - global vars r stored in e ./inventory/host_vars which is ref fr e hosts file
+# - pass in lh1 (SDmDC) or lh2 (Ansible) on CLI
+# - AWS credentials must be defined and populated (akey and skey) eg. in ansible-vault
+# - BIP credentials must be defined and populated (bip_user and bip_pass) (eg. ansible_vault edit secure.yml)
+
+- name: "Push Config to BIP #s2"
+  hosts: "{{ host }}"
+  gather_facts: false
+  connection: local
+
+#  vars:
+#    appsvcname: SDiApp-HZ
+#    pooltag: SD-HZ
+#    poolname: hpool
+#    VSname: VS-Hackazon
+#    VSdest: 10.6.10.224  # change to match BIP's priIP
+
+  environment:
+    AWS_ACCESS_KEY: "{{ akey }}"
+    AWS_SECRET_KEY: "{{ skey }}"
+    AWS_REGION: "ap-southeast-1"  # SG
+    ###
+    F5_SERVER: "{{ bip }}"
+    F5_SERVER_PORT: 8443
+    F5_USER: "{{ bip_user }}"
+    F5_PASSWORD: "{{ bip_pass }}"
+    F5_VALIDATE_CERTS: no
+
+  tasks:
+  - name: deploy SD-iApp
+    bigip_iapp_service:
+      name: "{{ appsvcname }}"
+      template: f5.service_discovery
+      state: present
+      parameters:
+        variables:
+        - name: cloud__cloud_provider
+          value: aws
+        - name: cloud__aws_use_role
+          value: no
+        - name: cloud__aws_role_arn
+        - name: cloud__aws_external_id
+        - name: cloud__aws_region
+          value: ap-southeast-1
+        - name: pool__pool_to_use
+          value: "/Common/{{ poolname }}"
+        - name: pool__member_conn_limit
+          value: 0
+        - name: pool__member_port
+          value: 80
+        - name: pool__interval
+          value: 30
+        - name: pool__public_private
+          value: private
+        - name: pool__tag_key
+          value: Name
+        - name: pool__tag_value
+          value: "{{ pooltag }}"
+
+  - name: create pool
+    bigip_pool:
+      name: "{{ poolname }}"
+      monitors:
+      - http
+      monitor_type: and_list
+
+#  # todo: auto-populate BIP private IP in VS dest
+#  - name: get facts
+#    ec2_instance_facts:
+#      filters:
+#        tags: "Name": "Big-IP: SDmDC"
+#    register: EC2facts
+#  - set_fact:
+#      bip_SG: "{{ EC2facts.network_interfaces.private_ip_address }}"
+
+  - name: create VS
+    bigip_virtual_server:
+      name: "{{ VSname }}"
+      destination: "{{ VSdest }}"
+      port: 80
+      snat: Automap
+      pool: "{{ poolname }}"
+      all_profiles:
+      - /Common/tcp
+      - /Common/http
+

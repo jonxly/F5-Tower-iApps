@@ -1,0 +1,32 @@
+---
+# [dec17] Scale ASG to number of desired HZ instances #4
+# Notes:
+# - global vars r stored in e ./inventory/host_vars which is ref fr e hosts file
+# - pass in lh1 (SDmDC) or lh2 (Ansible) on CLI
+# - AWS credentials must be defined and populated (akey and skey) eg. in ansible-vault
+# - require 3mins betw changes
+# - put in number of desired instances at CLI
+#   eg. ansible-playbook SDmDC/SD-configAWSinstance.yml -e "desired=3"
+
+- name: "Scale ASG to desired number of instances #4"
+  hosts: "{{ host }}"
+  gather_facts: false
+  connection: local
+
+#  vars:
+#    ASGname: SD-ASG-HZ
+#    LCname: SD-LC-HZ
+
+  environment:
+    AWS_ACCESS_KEY: "{{ akey }}"
+    AWS_SECRET_KEY: "{{ skey }}"
+    AWS_REGION: "ap-southeast-1"  # SG
+
+  tasks:
+  - name: mod ASG desired instances
+    ec2_asg:
+      name: "{{ ASGname }}"
+      launch_config_name: "{{ LCname }}"
+      desired_capacity: "{{ desired }}"
+      default_cooldown: 180
+      health_check_period: 180

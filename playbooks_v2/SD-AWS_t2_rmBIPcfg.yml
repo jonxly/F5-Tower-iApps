@@ -1,0 +1,44 @@
+---
+# [dec17] rm BIGIP config #t2
+# Notes:
+# - global vars r stored in e ./inventory/host_vars which is ref fr e hosts file
+# - pass in lh1 (SDmDC) or lh2 (Ansible) on CLI
+# - bip_user and bip_pass must be defined (eg. ansible_vault edit secure.yml)
+# - BIP server and port can be populated in env vars F5_SERVER/F5_SERVER_PORT or directly in PB env sect
+
+
+- name: "Remove BIP Config #t2"
+  hosts: "{{ host }}"
+  gather_facts: false
+  connection: local
+
+#  vars:
+#    VSname: VS-Hackazon
+#    poolname: hpool
+#    appsvcname: SDiApp-HZ
+
+  environment:
+    F5_SERVER: "{{ bip }}"
+    F5_SERVER_PORT: 8443
+    F5_USER: "{{ bip_user }}"
+    F5_PASSWORD: "{{ bip_pass }}"
+    F5_VALIDATE_CERTS: no
+
+  tasks:
+  - name: del VS
+    bigip_virtual_server:
+      name: "{{ VSname }}"
+      state: absent
+
+  - name: del pool
+    bigip_pool:
+      name: "{{ poolname }}"
+      state: absent
+
+  - name: del SD-iApp
+    bigip_iapp_service:
+      name: "{{ appsvcname }}"
+      template: f5.service_discovery
+      state: absent
+
+

@@ -1,0 +1,56 @@
+# [dec17] deploy single-NIC BIP on existing VPC, #s1
+# notes:
+# - global vars r stored in e ./inventory/host_vars which is ref fr e hosts file
+# - pass in lh1 (SDmDC) or lh2 (Ansible) on CLI
+# - prereqs: VPC setup with SDmDC prefix and public subnet where EC2s will be deployed
+# - AWS credentials must be defined and populated (akey and skey) eg. in ansible-vault
+#   eg. ansible-playbook xxx.yml --vault-id @.vault_pw -e @secure.yml
+# - can ssh after 1130min on T2.large, UI up after 13min
+
+- name: "Launch AWS single-NIC BIGIP #s1"
+  hosts: "{{ host }}"
+  gather_facts: false
+  connection: local
+
+#  vars:
+#    stack:
+#    vpc:
+#    subnet:
+#    sshkp:
+#    biplic:
+#    safeips:
+
+  environment:
+    AWS_ACCESS_KEY: "{{ akey }}"
+    AWS_SECRET_KEY: "{{ skey }}"
+    AWS_REGION: "ap-southeast-1"  # SG
+    ###
+    F5_SERVER: "{{ bip }}"
+    F5_SERVER_PORT: 8443
+    F5_USER: "{{ bip_user }}"
+    F5_PASSWORD: "{{ bip_pass }}"
+    F5_VALIDATE_CERTS: no
+
+  tasks:
+  - name: Launch BIG-IP CFT
+    cloudformation:
+      stack_name: "{{ stack }}"
+      state: "present"
+      disable_rollback: true
+      template: "../templates/f5-SD-deploy-bip_v1a.template"
+      template_parameters:
+        Vpc: "{{ vpc }}"
+        licenseKey1: "{{ biplic }}"  # put in new eval best lic
+        restrictedSrcAddress: "{{ safeips }}"
+        restrictedSrcAddressApp: "{{ safeips }}"
+        sshKey: "{{ sshkp }}"
+        subnet1Az1: "{{ subnet }}"  # look to make this dynamic
+        timezone: "Asia/Singapore"
+
+  - name: get facts
+    cloudformation_facts:
+      stack_name: "{{ stack }}"
+    register: bigip_ip
+  - set_fact:
+      bip_ip: "{{ bigip_ip['ansible_facts']['cloudformation']['SDmDC']['stack_outputs']['Bigip1subnet1Az1SelfEipAddress']}}"
+

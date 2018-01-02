@@ -1,0 +1,23 @@
+# [dec17] tear down BIP instance #t3 final
+# notes:
+# - global vars r stored in e ./inventory/host_vars which is ref fr e hosts file
+# - pass in lh1 (SDmDC) or lh2 (Ansible) on CLI
+# - store AWS credentials (akey and skey) in ansible-vault
+#   eg. ansible-playbook xxx.yml --vault-id @.vault_pw -e @secure.yml
+# - takes abt 2min to complete
+
+- name: "Tear down BIP #t3"
+  hosts: "{{ host }}"
+  gather_facts: false
+  connection: local
+
+  environment:
+    AWS_ACCESS_KEY: "{{ akey }}"
+    AWS_SECRET_KEY: "{{ skey }}"
+    AWS_REGION: "ap-southeast-1"  # SG
+
+  tasks:
+  - name: Teardown BIP CFT
+    cloudformation:
+      stack_name: "{{ stack }}"
+      state: "absent"

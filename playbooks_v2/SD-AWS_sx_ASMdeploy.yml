@@ -1,0 +1,52 @@
+---
+# [jan17] provision ASM and deploy secpol in BIP
+# Notes:
+# - global vars r stored in e ./inventory/host_vars which is ref fr e hosts file
+# - pass in lh1 (SDmDC) or lh2 (Ansible) on CLI
+# - AWS credentials must be defined and populated (akey and skey) eg. in ansible-vault
+# - BIP credentials must be defined likewise (bip_user and bip_pass)
+
+
+- name: "provision ASM and deploy secpol"
+  hosts: "{{ host }}"
+  gather_facts: false
+  connection: local
+
+#  vars:
+#    asmxml: ../files/hackazon_waap_policy.xml
+
+  environment:
+    F5_SERVER: "{{ bip }}"
+    F5_SERVER_PORT: 8443
+    F5_USER: "{{ bip_user }}"
+    F5_PASSWORD: "{{ bip_pass }}"
+    F5_VALIDATE_CERTS: no
+
+  tasks:
+  - name: provision ASM
+    bigip_provision:
+      module: asm
+      # level: nominal   # sthg wrong w minimum/minimal!
+
+  - name: deploy secpol
+    # deploy waap secpol
+    bigip_asm_policy:
+      name: HZ-WAAP-ASM
+      file: "{{ asmxml }}"
+      active: yes
+
+  - name: create l7 policy
+    bigip_policy:
+      name: hackazon_l7_policy
+      state: present
+
+  - name: add WAAP rule to hackazon_l7_policy
+    bigip_policy_rule:
+       name: activate_waap_rule
+       policy: hackazon_l7_policy
+       actions:
+        - type: enable
+          asm_policy: HZ-WAAP-ASM
+       conditions:
+        - type: all_traffic
+       state: present

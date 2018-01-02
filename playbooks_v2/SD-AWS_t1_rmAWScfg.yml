@@ -1,0 +1,40 @@
+---
+# [dec17] rm AWS config #t1
+# Notes:
+# - global vars r stored in e ./inventory/host_vars which is ref fr e hosts file
+# - pass in lh1 (SDmDC) or lh2 (Ansible) on CLI
+# - AWS credentials must be defined and populated (akey and skey) eg. in ansible-vault
+#   eg. ansible-playbook xxx.yml --vault-id @.vault_pw -e @secure.yml
+
+- name: "Remove AWS Config #t1"
+  hosts: "{{ host }}"
+  gather_facts: false
+  connection: local
+
+#  vars:
+#    secgrp: SD-SG-HZ
+#    ASGname: SD-ASG-HZ
+#    LCname: SD-LC-HZ
+
+  environment:
+    AWS_ACCESS_KEY: "{{ akey }}"
+    AWS_SECRET_KEY: "{{ skey }}"
+    AWS_REGION: "ap-southeast-1"  # SG
+
+  tasks:
+  - name: del ASG
+    # terminating e ASG will term all e EC2s, takes a while
+    ec2_asg:
+      name: "{{ ASGname }}"
+      launch_config_name: "{{ LCname }}"
+      state: absent
+
+  - name: del LC
+    ec2_lc:
+      name: "{{ LCname }}"
+      state: absent
+
+  - name: del secgrp
+    ec2_group:
+      name: "{{ secgrp }}"
+      state: absent
